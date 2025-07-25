@@ -858,70 +858,51 @@ header {
             }
         }
 
-        // スポットの表示
-        function renderSpots() {
-            spotGrid.innerHTML = '';
-            
-            spots.forEach(spot => {
-                const card = document.createElement('div');
-                card.className = 'spot-card';
-                card.dataset.id = spot.id;
-                
-                card.innerHTML = `
-                    <img src="https://source.unsplash.com/random/600x400/?${spot.image},japan,tokyo" alt="${spot.name.en}" class="spot-image">
-                    <div class="spot-info">
-                        <h2 class="spot-name">${spot.name[currentLanguage]}</h2>
-                        <div class="spot-location">
-                            📍 ${spot.location[currentLanguage]}
-                        </div>
-                        <p class="spot-description">${spot.description[currentLanguage]}</p>
-                    </div>
-                `;
-                
-                card.addEventListener('click', () => showSpotDetail(spot.id));
-                spotGrid.appendChild(card);
-            });
-        }
+<script>
+// ...（既存のコード）...
 
-        // 詳細ページの表示
-        function showSpotDetail(id) {
-            currentSpotId = id;
-            mainPage.style.display = 'none';
-            detailPage.style.display = 'block';
-            renderSpotDetail(id);
-        }
+// スポットカードの画像生成部分を修正
+function renderSpots() {
+  spotGrid.innerHTML = '';
+  
+  spots.forEach(spot => {
+    const card = document.createElement('div');
+    card.className = 'spot-card';
+    card.dataset.id = spot.id;
+    
+    card.innerHTML = `
+      <img src="${spot.image}" alt="${spot.name.en}" class="spot-image"> <!-- 修正箇所1 -->
+      <div class="spot-info">
+        <h2 class="spot-name">${spot.name[currentLanguage]}</h2>
+        <div class="spot-location">
+          📍 ${spot.location[currentLanguage]}
+        </div>
+        <p class="spot-description">${spot.description[currentLanguage]}</p>
+      </div>
+    `;
+    
+    card.addEventListener('click', () => showSpotDetail(spot.id));
+    spotGrid.appendChild(card);
+  });
+}
 
-        // 詳細ページのレンダリング
-        function renderSpotDetail(id) {
-            const spot = spots.find(s => s.id === id);
-            
-            detailPage.innerHTML = `
-                <div class="detail-header">
-                    <img src="https://source.unsplash.com/random/1200x600/?${spot.image},japan,tokyo" alt="${spot.name.en}" class="detail-image">
-                    <button class="back-btn" id="backBtn">← ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}</button>
-                    <h2 class="detail-title">${spot.name[currentLanguage]}</h2>
-                </div>
-                <div class="detail-content">
-                    <div class="detail-section">
-                        <h3 class="section-title">${currentLanguage === 'en' ? 'Description' : currentLanguage === 'zh' ? '描述' : '説明'}</h3>
-                        <p>${spot.description[currentLanguage]}</p>
-                    </div>
-                    <div class="detail-section">
-                        <h3 class="section-title">${currentLanguage === 'en' ? 'Access' : currentLanguage === 'zh' ? '交通' : 'アクセス'}</h3>
-                        <p>${spot.access[currentLanguage]}</p>
-                    </div>
-                    <div class="detail-section">
-                        <h3 class="section-title">${currentLanguage === 'en' ? 'Nearby Spots' : currentLanguage === 'zh' ? '附近景点' : '近くのスポット'}</h3>
-                        <p>${spot.nearby[currentLanguage]}</p>
-                    </div>
-                    <div class="detail-section">
-                        <h3 class="section-title">${currentLanguage === 'en' ? 'Official Website' : currentLanguage === 'zh' ? '官方网站' : '公式サイト'}</h3>
-                        <a href="${spot.official}" target="_blank" class="official-link">
-                            ${currentLanguage === 'en' ? 'Visit Website' : currentLanguage === 'zh' ? '访问网站' : 'サイトを訪問'}
-                        </a>
-                    </div>
-                </div>
-            `;
+// 詳細ページの画像生成部分を修正
+function renderSpotDetail(id) {
+  const spot = spots.find(s => s.id === id);
+  
+  detailPage.innerHTML = `
+    <div class="detail-header">
+      <img src="${spot.image}" alt="${spot.name.en}" class="detail-image"> <!-- 修正箇所2 -->
+      <button class="back-btn" id="backBtn">← ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}</button>
+      <h2 class="detail-title">${spot.name[currentLanguage]}</h2>
+    </div>
+    <div class="detail-content">
+      <!-- ...（その他の詳細情報）... -->
+    </div>
+  `;
+  
+  // ...（既存のコード）...
+}
             
             // 戻るボタンのイベントリスナー
             document.getElementById('backBtn').addEventListener('click', () => {
