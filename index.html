@@ -6,10 +6,12 @@
     <meta name="theme-color" content="#121212">
     <title>Tokyo Travel Guide - Discover the Best of Tokyo</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* スタイルは変更ありません（元のCSSをそのまま保持） */
+        /* スタイルの改善 */
         :root {
             --primary-color: #e53935;
+            --primary-dark: #c62828;
             --dark-bg: #121212;
             --dark-card: #1e1e1e;
             --dark-text: #f5f5f5;
@@ -17,13 +19,14 @@
             --light-card: #ffffff;
             --light-text: #333333;
             --shadow: 0 4px 12px rgba(0,0,0,0.15);
+            --skeleton-bg: #2a2a2a;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s, opacity 0.3s;
         }
 
         body {
@@ -41,6 +44,10 @@
             color: var(--light-text);
         }
 
+        body.light-mode .skeleton {
+            background-color: #e0e0e0;
+        }
+
         /* ヘッダー */
         header {
             background-color: rgba(18, 18, 18, 0.95);
@@ -55,6 +62,7 @@
             justify-content: space-between;
             align-items: center;
             height: 60px;
+            backdrop-filter: blur(10px);
         }
 
         body.light-mode header {
@@ -139,6 +147,7 @@
             box-shadow: var(--shadow);
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
+            position: relative;
         }
 
         body.light-mode .spot-card {
@@ -150,11 +159,22 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
+        .spot-image-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
         .spot-image {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
             border-bottom: 3px solid var(--primary-color);
+        }
+
+        .spot-card:hover .spot-image {
+            transform: scale(1.05);
         }
 
         .spot-info {
@@ -195,14 +215,15 @@
         .detail-header {
             position: relative;
             margin-bottom: 30px;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .detail-image {
             width: 100%;
-            height: 350px;
+            height: 400px;
             object-fit: cover;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
+            display: block;
         }
 
         .detail-title {
@@ -231,6 +252,7 @@
             align-items: center;
             gap: 8px;
             font-weight: 600;
+            z-index: 10;
         }
 
         .detail-content {
@@ -277,7 +299,7 @@
         }
 
         .official-link:hover {
-            background-color: #c62828;
+            background-color: var(--primary-dark);
             transform: translateY(-2px);
         }
 
@@ -288,6 +310,7 @@
             text-align: center;
             font-size: 0.9rem;
             color: #aaa;
+            backdrop-filter: blur(10px);
         }
 
         body.light-mode footer {
@@ -324,37 +347,87 @@
             font-size: 0.8rem;
         }
 
+        /* スケルトンローディング */
+        .skeleton {
+            background-color: var(--skeleton-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
 
-/* 修正箇所3: モバイル表示時の調整 */
-@media (max-width: 768px) {
-  body {
-    padding-top: 110px; /* モバイルではさらに余裕を持たせる */
-  }
-  
-header {
-    min-height: 90px; /* モバイルでの最小高さ確保 */
-    height: auto; /* 高さを自動調整に */
-    flex-wrap: wrap; /* 要素が折り返せるように */
-  }
-  
-  .controls {
-      width: 100%;
-      justify-content: space-between;
-  }
-  
-  .spot-grid {
-      grid-template-columns: 1fr;
-  }
-  
-  .detail-image {
-      height: 250px;
-  }
-  
-  .detail-title {
-      font-size: 1.4rem;
-      padding: 10px 15px;
-  }
-}
+        .skeleton::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .skeleton-image {
+            width: 100%;
+            height: 200px;
+        }
+
+        .skeleton-text {
+            height: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-text.short {
+            width: 60%;
+        }
+
+        .skeleton-text.medium {
+            width: 80%;
+        }
+
+        /* 修正箇所3: モバイル表示時の調整 */
+        @media (max-width: 768px) {
+          body {
+            padding-top: 110px; /* モバイルではさらに余裕を持たせる */
+          }
+          
+          header {
+            min-height: 90px; /* モバイルでの最小高さ確保 */
+            height: auto; /* 高さを自動調整に */
+            flex-wrap: wrap; /* 要素が折り返せるように */
+          }
+          
+          .controls {
+              width: 100%;
+              justify-content: space-between;
+          }
+          
+          .spot-grid {
+              grid-template-columns: 1fr;
+          }
+          
+          .detail-image {
+              height: 250px;
+          }
+          
+          .detail-title {
+              font-size: 1.4rem;
+              padding: 10px 15px;
+          }
+        }
     </style>
 </head>
 <body>
@@ -428,7 +501,7 @@ header {
                     ja: "仲見世商店街、隅田川"
                 },
                 official: "https://www.tokyo-skytree.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwWZUQohxpYoX6fA5rMoiFQIqAy0WYPQqla1GBWi9V7ReI7ZEttlJOfPo&s=10"
+                imageQuery: "asakusa+temple+tokyo"
             },
             {
                 id: 2,
@@ -458,7 +531,7 @@ header {
                     ja: "上野動物園、東京国立博物館"
                 },
                 official: "https://www.ueno.or.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXWT_xy6rKzZlKTr16XStSKOO9usJnvno-DwSgCL--IXEmQPTyxlKfU2M&s=10"
+                imageQuery: "ueno+park+tokyo"
             },
             {
                 id: 3,
@@ -488,7 +561,7 @@ header {
                     ja: "明治神宮、代々木公園"
                 },
                 official: "https://www.shibuya-scramble-square.com/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTNNrXDjdJGI9fmaWkdinTFsFYuJgxFr4suG5X_RuNz9QkegGsa4Ln7UAg&s=10"
+                imageQuery: "shibuya+crossing+tokyo"
             },
             {
                 id: 4,
@@ -518,7 +591,7 @@ header {
                     ja: "皇居、日比谷公園"
                 },
                 official: "https://ginza.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEAXzHnHyVQO8e38sFAveQ7eRqN82_OFPQAFu03a3R17bBpMlV2Srklf4&s=10"
+                imageQuery: "ginza+tokyo"
             },
             {
                 id: 5,
@@ -548,7 +621,7 @@ header {
                     ja: "イクスピアリ"
                 },
                 official: "https://www.tokyodisneyresort.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTsgB-EdrKB5FLReya0TROXDm0gzT6oAhwUWici17NQ7-v6XDR2XR8RIK8&s=10"
+                imageQuery: "tokyo+disneyland"
             },
             {
                 id: 6,
@@ -578,7 +651,7 @@ header {
                     ja: "中禅寺湖、華厳の滝"
                 },
                 official: "https://www.visitnikko.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUzyVLdd_VahQbDrP4uxQarj16-rsIGw1-xTChzS25uNFjn5e3sxX6Aoc&s=10"
+                imageQuery: "nikko+toshogu"
             },
             {
                 id: 7,
@@ -608,7 +681,7 @@ header {
                     ja: "高尾599ミュージアム"
                 },
                 official: "https://www.takaotozan.co.jp/foreign/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsw_OBSmxnrLXhiJK7JqzyontHCPOMEPCD7lCAfxdxEpIwQnfef4sKMslH&s=10"
+                imageQuery: "mount+takao"
             },
             {
                 id: 8,
@@ -638,7 +711,7 @@ header {
                     ja: "新宿御苑、歌舞伎町"
                 },
                 official: "https://www.gotokyo.org/en/spot/15/index.html",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStVm7zMTBPS4-4Kk_xmBw2zqfLwkSDoJ_fhQB0-7XoyVSfxahkKETOxJ7o&s=10"
+                imageQuery: "shinjuku+tokyo+night"
             },
             {
                 id: 9,
@@ -668,7 +741,7 @@ header {
                     ja: "井の頭公園"
                 },
                 official: "http://www.ghibli-museum.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhcgOj6yxKybk-ONEGtRrTv5gV9tmaf-1h136GtpJmzHThPYLiOE31lIoF&s=10"
+                imageQuery: "ghibli+museum"
             },
             {
                 id: 10,
@@ -698,7 +771,7 @@ header {
                     ja: "奥多摩湖、氷川渓谷"
                 },
                 official: "https://www.okutama-kanko.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoNH5nrYNhENwdaICmLpnm4rdz7dJFphKzUZaFtG5u64iYyqPe61h4C68&s=10"
+                imageQuery: "okutama+lake"
             },
             {
                 id: 11,
@@ -728,7 +801,7 @@ header {
                     ja: "芦ノ湖、箱根神社"
                 },
                 official: "https://www.hakone.or.jp/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFqu8cKHpdDBTA-DJZbPqmX5jcSLGc3kNOLW0I7htKLe9k5aWacWpkEl4&s=10"
+                imageQuery: "hakone+fuji"
             },
             {
                 id: 12,
@@ -758,7 +831,7 @@ header {
                     ja: "鎌倉大仏、江島神社"
                 },
                 official: "https://www.enoshima-seacandle.com/en/",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPKIS9z8PozceiV6RccRbRpHX9n7OllGBlXwZ9_y56AfX-XupfRZ8FL9cM&s=10"
+                imageQuery: "kamakura+buddha"
             }
         ];
 
@@ -775,6 +848,11 @@ header {
         const mainTitle = document.querySelector('.main-title');
         const modeToggle = document.getElementById('modeToggle');
         const modeIcon = document.querySelector('.mode-icon');
+
+        // 画像URL生成関数
+        function generateImageUrl(query, width, height) {
+            return `https://source.unsplash.com/featured/${width}x${height}/?${query},japan`;
+        }
 
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
@@ -855,19 +933,34 @@ header {
                 card.className = 'spot-card';
                 card.dataset.id = spot.id;
                 
-                // 画像URLの生成を修正
-                const imageUrl = `https://source.unsplash.com/random/600x400/?${spot.image},japan`;
-                
+                // スケルトン表示
                 card.innerHTML = `
-                    <img src="${imageUrl}" alt="${spot.name.en}" class="spot-image">
+                    <div class="spot-image-container">
+                        <div class="skeleton skeleton-image"></div>
+                    </div>
                     <div class="spot-info">
                         <h2 class="spot-name">${spot.name[currentLanguage]}</h2>
                         <div class="spot-location">
-                            📍 ${spot.location[currentLanguage]}
+                            <i class="fas fa-map-marker-alt"></i> ${spot.location[currentLanguage]}
                         </div>
                         <p class="spot-description">${spot.description[currentLanguage]}</p>
                     </div>
                 `;
+                
+                // 画像の非同期ロード
+                const img = new Image();
+                img.src = generateImageUrl(spot.imageQuery, 400, 300);
+                img.alt = spot.name[currentLanguage];
+                img.className = 'spot-image';
+                img.onload = () => {
+                    const container = card.querySelector('.spot-image-container');
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                };
+                img.onerror = () => {
+                    const container = card.querySelector('.spot-image-container');
+                    container.innerHTML = `<div class="spot-image" style="background: #e53935; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${spot.name[currentLanguage]}</div>`;
+                };
                 
                 card.addEventListener('click', () => showSpotDetail(spot.id));
                 spotGrid.appendChild(card);
@@ -886,13 +979,13 @@ header {
         function renderSpotDetail(id) {
             const spot = spots.find(s => s.id === id);
             
-            // 詳細画像URLの生成を修正
-            const detailImageUrl = `https://source.unsplash.com/random/1200x600/?${spot.image},japan`;
-            
+            // スケルトン表示
             detailPage.innerHTML = `
                 <div class="detail-header">
-                    <img src="${detailImageUrl}" alt="${spot.name.en}" class="detail-image">
-                    <button class="back-btn" id="backBtn">← ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}</button>
+                    <div class="skeleton" style="height: 400px; border-radius: 12px;"></div>
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i> ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}
+                    </button>
                     <h2 class="detail-title">${spot.name[currentLanguage]}</h2>
                 </div>
                 <div class="detail-content">
@@ -911,18 +1004,51 @@ header {
                     <div class="detail-section">
                         <h3 class="section-title">${currentLanguage === 'en' ? 'Official Website' : currentLanguage === 'zh' ? '官方网站' : '公式サイト'}</h3>
                         <a href="${spot.official}" target="_blank" class="official-link">
-                            ${currentLanguage === 'en' ? 'Visit Website' : currentLanguage === 'zh' ? '访问网站' : 'サイトを訪問'}
+                            <i class="fas fa-external-link-alt"></i> ${currentLanguage === 'en' ? 'Visit Website' : currentLanguage === 'zh' ? '访问网站' : 'サイトを訪問'}
                         </a>
                     </div>
                 </div>
             `;
             
-            // 戻るボタンのイベントリスナー
-            document.getElementById('backBtn').addEventListener('click', () => {
-                detailPage.style.display = 'none';
-                mainPage.style.display = 'block';
-                currentSpotId = null;
-            });
+            // 詳細画像の非同期ロード
+            const detailImg = new Image();
+            detailImg.src = generateImageUrl(spot.imageQuery, 800, 400);
+            detailImg.alt = spot.name[currentLanguage];
+            detailImg.className = 'detail-image';
+            detailImg.onload = () => {
+                const header = document.querySelector('.detail-header');
+                header.innerHTML = `
+                    <img src="${detailImg.src}" alt="${spot.name[currentLanguage]}" class="detail-image">
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i> ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}
+                    </button>
+                    <h2 class="detail-title">${spot.name[currentLanguage]}</h2>
+                `;
+                
+                // 戻るボタンのイベントリスナーを再設定
+                document.getElementById('backBtn').addEventListener('click', () => {
+                    detailPage.style.display = 'none';
+                    mainPage.style.display = 'block';
+                    currentSpotId = null;
+                });
+            };
+            detailImg.onerror = () => {
+                const header = document.querySelector('.detail-header');
+                header.innerHTML = `
+                    <div class="detail-image" style="background: #e53935; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 2rem; text-align: center; padding: 20px;">${spot.name[currentLanguage]}</div>
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i> ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}
+                    </button>
+                    <h2 class="detail-title">${spot.name[currentLanguage]}</h2>
+                `;
+                
+                // 戻るボタンのイベントリスナーを再設定
+                document.getElementById('backBtn').addEventListener('click', () => {
+                    detailPage.style.display = 'none';
+                    mainPage.style.display = 'block';
+                    currentSpotId = null;
+                });
+            };
         }
 
         // イベントリスナーの設定
