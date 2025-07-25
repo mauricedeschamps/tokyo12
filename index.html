@@ -6,12 +6,9 @@
     <meta name="theme-color" content="#121212">
     <title>Tokyo Travel Guide - Discover the Best of Tokyo</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #e53935;
-            --primary-light: #ff6f60;
-            --primary-dark: #ab000d;
             --dark-bg: #121212;
             --dark-card: #1e1e1e;
             --dark-text: #f5f5f5;
@@ -19,14 +16,13 @@
             --light-card: #ffffff;
             --light-text: #333333;
             --shadow: 0 4px 12px rgba(0,0,0,0.15);
-            --transition: all 0.3s ease;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: var(--transition);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body {
@@ -88,7 +84,6 @@
         .controls {
             display: flex;
             gap: 10px;
-            align-items: center;
         }
 
         .btn {
@@ -114,11 +109,6 @@
             background-color: var(--primary-color);
             color: white;
         }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
 
         /* メインコンテンツ */
         .container {
@@ -132,65 +122,6 @@
             margin-bottom: 30px;
             font-size: 2.2rem;
             color: var(--primary-color);
-        }
-        
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 30px;
-            position: relative;
-        }
-        
-        .search-box {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 30px;
-            border: none;
-            background-color: var(--dark-card);
-            color: var(--dark-text);
-            font-size: 1rem;
-            box-shadow: var(--shadow);
-            padding-left: 50px;
-        }
-        
-        body.light-mode .search-box {
-            background-color: var(--light-card);
-            color: var(--light-text);
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-        }
-        
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 8px 20px;
-            border-radius: 20px;
-            background-color: var(--dark-card);
-            color: var(--dark-text);
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        body.light-mode .filter-btn {
-            background-color: var(--light-card);
-            color: var(--light-text);
-        }
-        
-        .filter-btn.active {
-            background-color: var(--primary-color);
-            color: white;
         }
 
         .spot-grid {
@@ -207,7 +138,6 @@
             box-shadow: var(--shadow);
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
-            position: relative;
         }
 
         body.light-mode .spot-card {
@@ -215,53 +145,14 @@
         }
 
         .spot-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-        }
-        
-        .favorite-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0,0,0,0.6);
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-        
-        .favorite-btn.active {
-            color: #ff4081;
-            background: rgba(255, 255, 255, 0.8);
-        }
-        
-        .favorite-btn:hover {
-            transform: scale(1.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
         .spot-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-bottom: 3px solid var(--primary-color);
-        }
-        
-        .image-placeholder {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #2c3e50, #4a6491);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
             border-bottom: 3px solid var(--primary-color);
         }
 
@@ -303,26 +194,14 @@
         .detail-header {
             position: relative;
             margin-bottom: 30px;
-            border-radius: 12px;
-            overflow: hidden;
         }
 
         .detail-image {
             width: 100%;
             height: 350px;
             object-fit: cover;
-            display: block;
-        }
-        
-        .detail-image-placeholder {
-            width: 100%;
-            height: 350px;
-            background: linear-gradient(45deg, #2c3e50, #4a6491);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
         }
 
         .detail-title {
@@ -351,11 +230,6 @@
             align-items: center;
             gap: 8px;
             font-weight: 600;
-            z-index: 10;
-        }
-        
-        .back-btn:hover {
-            background-color: rgba(0, 0, 0, 0.9);
         }
 
         .detail-content {
@@ -387,9 +261,6 @@
             color: var(--primary-color);
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .official-link {
@@ -402,50 +273,11 @@
             font-weight: 600;
             margin-top: 15px;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .official-link:hover {
-            background-color: var(--primary-dark);
+            background-color: #c62828;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .map-container {
-            height: 300px;
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            margin-top: 15px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-weight: bold;
-        }
-        
-        .favorites-container {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid var(--primary-color);
-        }
-        
-        .favorites-title {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .no-favorites {
-            text-align: center;
-            padding: 30px;
-            color: #aaa;
-            font-style: italic;
         }
 
         /* フッター */
@@ -478,16 +310,6 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
 
         /* 言語選択のスタイル */
         .lang-selector {
@@ -502,22 +324,22 @@
         }
 
 
-        /* モバイル表示時の調整 */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 110px;
-            }
-
-            header {
-                min-height: 90px;
-                height: auto;
-                flex-wrap: wrap;
-            }
-            
+/* 修正箇所3: モバイル表示時の調整 */
+@media (max-width: 768px) {
+  body {
+    padding-top: 110px; /* モバイルではさらに余裕を持たせる */
+  }
+  
+header {
+    min-height: 90px; /* モバイルでの最小高さ確保 */
+    height: auto; /* 高さを自動調整に */
+    flex-wrap: wrap; /* 要素が折り返せるように */
+  }
+}
+    
             .controls {
                 width: 100%;
                 justify-content: space-between;
-                margin-top: 10px;
             }
             
             .spot-grid {
@@ -531,11 +353,6 @@
             .detail-title {
                 font-size: 1.4rem;
                 padding: 10px 15px;
-            }
-            
-            .filters {
-                flex-direction: column;
-                align-items: center;
             }
         }
     </style>
@@ -563,29 +380,9 @@
     <div class="container">
         <h1 class="main-title">Discover Tokyo's Top Attractions</h1>
         
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-box" id="searchInput" placeholder="Search attractions...">
-        </div>
-        
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="popular">Popular</button>
-            <button class="filter-btn" data-filter="nature">Nature</button>
-            <button class="filter-btn" data-filter="culture">Culture</button>
-            <button class="filter-btn" data-filter="family">Family</button>
-        </div>
-        
         <div class="main-page" id="mainPage">
-            <div class="spot-grid" id="spotGrid">
+            <div class="spot-grid">
                 <!-- スポットカードはJavaScriptで生成 -->
-            </div>
-            
-            <div class="favorites-container" id="favoritesSection">
-                <h2 class="favorites-title"><i class="fas fa-heart"></i> Your Favorites</h2>
-                <div class="favorites-grid" id="favoritesGrid">
-                    <!-- お気に入りスポットはJavaScriptで生成 -->
-                </div>
             </div>
         </div>
         
@@ -593,6 +390,18 @@
             <!-- 詳細ページはJavaScriptで生成 -->
         </div>
     </div>
+
+<script 
+  src="https://www.paypal.com/sdk/js?client-id=BAA0suVAzcTFoJgRUMmayNk7_ZdiVzOf-FAcRGFkBOfbIrrZHRPCVk08izlnAVYXfOv1t80zabAbgIOBCs&components=hosted-buttons&disable-funding=venmo&currency=USD">
+</script>
+
+<div id="paypal-container-MFVPZZDFUTKEN"></div>
+<script>
+  paypal.HostedButtons({
+    hostedButtonId: "MFVPZZDFUTKEN",
+  }).render("#paypal-container-MFVPZZDFUTKEN")
+</script>
+    
 
     <!-- フッター -->
     <footer>
@@ -631,8 +440,7 @@
                     ja: "仲見世商店街、隅田川"
                 },
                 official: "https://www.tokyo-skytree.jp/en/",
-                image: "https://images.unsplash.com/photo-1588416936137-704fba5b0f31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["popular", "culture"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwWZUQohxpYoX6fA5rMoiFQIqAy0WYPQqla1GBWi9V7ReI7ZEttlJOfPo&s=10"
             },
             {
                 id: 2,
@@ -662,8 +470,7 @@
                     ja: "上野動物園、東京国立博物館"
                 },
                 official: "https://www.ueno.or.jp/en/",
-                image: "https://images.unsplash.com/photo-1605244471298-9b0acb7d90a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["culture", "family"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXWT_xy6rKzZlKTr16XStSKOO9usJnvno-DwSgCL--IXEmQPTyxlKfU2M&s=10"
             },
             {
                 id: 3,
@@ -693,8 +500,7 @@
                     ja: "明治神宮、代々木公園"
                 },
                 official: "https://www.shibuya-scramble-square.com/en/",
-                image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["popular"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTNNrXDjdJGI9fmaWkdinTFsFYuJgxFr4suG5X_RuNz9QkegGsa4Ln7UAg&s=10"
             },
             {
                 id: 4,
@@ -724,8 +530,7 @@
                     ja: "皇居、日比谷公園"
                 },
                 official: "https://ginza.jp/en/",
-                image: "https://images.unsplash.com/photo-1609621838510-5adca1ee229a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["popular"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEAXzHnHyVQO8e38sFAveQ7eRqN82_OFPQAFu03a3R17bBpMlV2Srklf4&s=10"
             },
             {
                 id: 5,
@@ -755,8 +560,7 @@
                     ja: "イクスピアリ"
                 },
                 official: "https://www.tokyodisneyresort.jp/en/",
-                image: "https://images.unsplash.com/photo-1595104666590-65f5d1d8b00b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["family", "popular"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTsgB-EdrKB5FLReya0TROXDm0gzT6oAhwUWici17NQ7-v6XDR2XR8RIK8&s=10"
             },
             {
                 id: 6,
@@ -786,8 +590,7 @@
                     ja: "中禅寺湖、華厳の滝"
                 },
                 official: "https://www.visitnikko.jp/en/",
-                image: "https://images.unsplash.com/photo-1542641728-6ca359b085f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["nature", "culture"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUzyVLdd_VahQbDrP4uxQarj16-rsIGw1-xTChzS25uNFjn5e3sxX6Aoc&s=10"
             },
             {
                 id: 7,
@@ -817,8 +620,7 @@
                     ja: "高尾599ミュージアム"
                 },
                 official: "https://www.takaotozan.co.jp/foreign/en/",
-                image: "https://images.unsplash.com/photo-1534237886190-ced735ca4b73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["nature"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsw_OBSmxnrLXhiJK7JqzyontHCPOMEPCD7lCAfxdxEpIwQnfef4sKMslH&s=10"
             },
             {
                 id: 8,
@@ -848,8 +650,7 @@
                     ja: "新宿御苑、歌舞伎町"
                 },
                 official: "https://www.gotokyo.org/en/spot/15/index.html",
-                image: "https://images.unsplash.com/photo-1582657118090-af35eefb9958?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["popular"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStVm7zMTBPS4-4Kk_xmBw2zqfLwkSDoJ_fhQB0-7XoyVSfxahkKETOxJ7o&s=10"
             },
             {
                 id: 9,
@@ -879,8 +680,7 @@
                     ja: "井の頭公園"
                 },
                 official: "http://www.ghibli-museum.jp/en/",
-                image: "https://images.unsplash.com/photo-1568667256549-094345857637?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["culture", "family"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhcgOj6yxKybk-ONEGtRrTv5gV9tmaf-1h136GtpJmzHThPYLiOE31lIoF&s=10"
             },
             {
                 id: 10,
@@ -910,8 +710,7 @@
                     ja: "奥多摩湖、氷川渓谷"
                 },
                 official: "https://www.okutama-kanko.jp/en/",
-                image: "https://images.unsplash.com/photo-1565958011703-72f85826667c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["nature"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoNH5nrYNhENwdaICmLpnm4rdz7dJFphKzUZaFtG5u64iYyqPe61h4C68&s=10"
             },
             {
                 id: 11,
@@ -941,8 +740,7 @@
                     ja: "芦ノ湖、箱根神社"
                 },
                 official: "https://www.hakone.or.jp/en/",
-                image: "https://images.unsplash.com/photo-1593696140826-c58b021acf8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["nature", "popular"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFqu8cKHpdDBTA-DJZbPqmX5jcSLGc3kNOLW0I7htKLe9k5aWacWpkEl4&s=10"
             },
             {
                 id: 12,
@@ -972,8 +770,7 @@
                     ja: "鎌倉大仏、江島神社"
                 },
                 official: "https://www.enoshima-seacandle.com/en/",
-                image: "https://images.unsplash.com/photo-1593697820826-f4afab81d7c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                tags: ["culture", "nature"]
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPKIS9z8PozceiV6RccRbRpHX9n7OllGBlXwZ9_y56AfX-XupfRZ8FL9cM&s=10"
             }
         ];
 
@@ -981,21 +778,15 @@
         let currentLanguage = 'en';
         let darkMode = true;
         let currentSpotId = null;
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        let activeFilter = 'all';
 
         // DOM要素
         const mainPage = document.getElementById('mainPage');
         const detailPage = document.getElementById('detailPage');
-        const spotGrid = document.getElementById('spotGrid');
-        const favoritesGrid = document.getElementById('favoritesGrid');
-        const favoritesSection = document.getElementById('favoritesSection');
+        const spotGrid = document.querySelector('.spot-grid');
         const appName = document.querySelector('.app-name');
         const mainTitle = document.querySelector('.main-title');
         const modeToggle = document.getElementById('modeToggle');
         const modeIcon = document.querySelector('.mode-icon');
-        const searchInput = document.getElementById('searchInput');
-        const filterButtons = document.querySelectorAll('.filter-btn');
 
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
@@ -1003,8 +794,6 @@
             loadSettings();
             // スポットの表示
             renderSpots();
-            // お気に入りの表示
-            renderFavorites();
             // イベントリスナーの設定
             setupEventListeners();
         });
@@ -1049,21 +838,6 @@
             mainTitle.textContent = currentLanguage === 'en' ? 'Discover Tokyo\'s Top Attractions' : 
                                 currentLanguage === 'zh' ? '探索东京热门景点' : '東京の人気観光スポットを発見';
             
-            // 検索ボックスのプレースホルダー
-            searchInput.placeholder = currentLanguage === 'en' ? 'Search attractions...' : 
-                                currentLanguage === 'zh' ? '搜索景点...' : '観光スポットを検索...';
-            
-            // フィルターボタンの更新
-            filterButtons.forEach(btn => {
-                const filter = btn.dataset.filter;
-                btn.textContent = 
-                    filter === 'all' ? (currentLanguage === 'en' ? 'All' : currentLanguage === 'zh' ? '全部' : 'すべて') :
-                    filter === 'popular' ? (currentLanguage === 'en' ? 'Popular' : currentLanguage === 'zh' ? '热门' : '人気') :
-                    filter === 'nature' ? (currentLanguage === 'en' ? 'Nature' : currentLanguage === 'zh' ? '自然' : '自然') :
-                    filter === 'culture' ? (currentLanguage === 'en' ? 'Culture' : currentLanguage === 'zh' ? '文化' : '文化') :
-                    (currentLanguage === 'en' ? 'Family' : currentLanguage === 'zh' ? '家庭' : '家族');
-            });
-            
             // スポットの再表示
             renderSpots();
             
@@ -1088,130 +862,25 @@
         function renderSpots() {
             spotGrid.innerHTML = '';
             
-            const searchTerm = searchInput.value.toLowerCase();
-            
             spots.forEach(spot => {
-                // フィルタリング
-                if (activeFilter !== 'all' && !spot.tags.includes(activeFilter)) {
-                    return;
-                }
-                
-                // 検索フィルタリング
-                const name = spot.name[currentLanguage].toLowerCase();
-                const desc = spot.description[currentLanguage].toLowerCase();
-                const loc = spot.location[currentLanguage].toLowerCase();
-                
-                if (searchTerm && !(name.includes(searchTerm) && !(desc.includes(searchTerm)) {
-                    return;
-                }
-                
-                const isFavorite = favorites.includes(spot.id);
-                
                 const card = document.createElement('div');
                 card.className = 'spot-card';
                 card.dataset.id = spot.id;
                 
                 card.innerHTML = `
-                    ${spot.image ? 
-                        `<img src="${spot.image}" alt="${spot.name.en}" class="spot-image">` : 
-                        `<div class="image-placeholder"><i class="fas fa-landmark"></i></div>`}
-                    <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${spot.id}">
-                        <i class="fas fa-heart"></i>
-                    </button>
+                    <img src="https://source.unsplash.com/random/600x400/?${spot.image},japan,tokyo" alt="${spot.name.en}" class="spot-image">
                     <div class="spot-info">
                         <h2 class="spot-name">${spot.name[currentLanguage]}</h2>
                         <div class="spot-location">
-                            <i class="fas fa-map-marker-alt"></i> ${spot.location[currentLanguage]}
+                            📍 ${spot.location[currentLanguage]}
                         </div>
                         <p class="spot-description">${spot.description[currentLanguage]}</p>
                     </div>
                 `;
                 
-                card.addEventListener('click', (e) => {
-                    if (!e.target.closest('.favorite-btn')) {
-                        showSpotDetail(spot.id);
-                    }
-                });
-                
-                // お気に入りボタン
-                const favBtn = card.querySelector('.favorite-btn');
-                favBtn.addEventListener('click', () => toggleFavorite(spot.id));
-                
+                card.addEventListener('click', () => showSpotDetail(spot.id));
                 spotGrid.appendChild(card);
             });
-            
-            // お気に入りの表示更新
-            renderFavorites();
-        }
-        
-        // お気に入りの表示
-        function renderFavorites() {
-            if (!favoritesGrid) return;
-            
-            favoritesGrid.innerHTML = '';
-            
-            if (favorites.length === 0) {
-                const noFav = document.createElement('div');
-                noFav.className = 'no-favorites';
-                noFav.innerHTML = `
-                    <i class="fas fa-heart-broken"></i>
-                    <p>${currentLanguage === 'en' ? 'No favorites yet. Click the heart icon to add some!' : 
-                      currentLanguage === 'zh' ? '还没有收藏。点击心形图标添加一些！' : 
-                      'お気に入りはまだありません。ハートアイコンをクリックして追加しましょう！'}</p>
-                `;
-                favoritesGrid.appendChild(noFav);
-                return;
-            }
-            
-            favorites.forEach(id => {
-                const spot = spots.find(s => s.id === id);
-                if (!spot) return;
-                
-                const card = document.createElement('div');
-                card.className = 'spot-card pulse';
-                card.dataset.id = spot.id;
-                
-                card.innerHTML = `
-                    ${spot.image ? 
-                        `<img src="${spot.image}" alt="${spot.name.en}" class="spot-image">` : 
-                        `<div class="image-placeholder"><i class="fas fa-landmark"></i></div>`}
-                    <button class="favorite-btn active" data-id="${spot.id}">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                    <div class="spot-info">
-                        <h2 class="spot-name">${spot.name[currentLanguage]}</h2>
-                        <div class="spot-location">
-                            <i class="fas fa-map-marker-alt"></i> ${spot.location[currentLanguage]}
-                        </div>
-                        <p class="spot-description">${spot.description[currentLanguage]}</p>
-                    </div>
-                `;
-                
-                card.addEventListener('click', (e) => {
-                    if (!e.target.closest('.favorite-btn')) {
-                        showSpotDetail(spot.id);
-                    }
-                });
-                
-                // お気に入りボタン
-                const favBtn = card.querySelector('.favorite-btn');
-                favBtn.addEventListener('click', () => toggleFavorite(spot.id));
-                
-                favoritesGrid.appendChild(card);
-            });
-        }
-        
-        // お気に入りのトグル
-        function toggleFavorite(id) {
-            const index = favorites.indexOf(id);
-            if (index > -1) {
-                favorites.splice(index, 1);
-            } else {
-                favorites.push(id);
-            }
-            
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            renderSpots();
         }
 
         // 詳細ページの表示
@@ -1225,42 +894,29 @@
         // 詳細ページのレンダリング
         function renderSpotDetail(id) {
             const spot = spots.find(s => s.id === id);
-            const isFavorite = favorites.includes(id);
             
             detailPage.innerHTML = `
                 <div class="detail-header">
-                    ${spot.image ? 
-                        `<img src="${spot.image}" alt="${spot.name.en}" class="detail-image">` : 
-                        `<div class="detail-image-placeholder"><i class="fas fa-landmark"></i></div>`}
-                    <button class="back-btn" id="backBtn">
-                        <i class="fas fa-arrow-left"></i> ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}
-                    </button>
-                    <button class="favorite-btn ${isFavorite ? 'active' : ''}" id="detailFavoriteBtn" data-id="${spot.id}">
-                        <i class="fas fa-heart"></i>
-                    </button>
+                    <img src="https://source.unsplash.com/random/1200x600/?${spot.image},japan,tokyo" alt="${spot.name.en}" class="detail-image">
+                    <button class="back-btn" id="backBtn">← ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}</button>
                     <h2 class="detail-title">${spot.name[currentLanguage]}</h2>
                 </div>
                 <div class="detail-content">
                     <div class="detail-section">
-                        <h3 class="section-title"><i class="fas fa-info-circle"></i> ${currentLanguage === 'en' ? 'Description' : currentLanguage === 'zh' ? '描述' : '説明'}</h3>
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Description' : currentLanguage === 'zh' ? '描述' : '説明'}</h3>
                         <p>${spot.description[currentLanguage]}</p>
                     </div>
                     <div class="detail-section">
-                        <h3 class="section-title"><i class="fas fa-subway"></i> ${currentLanguage === 'en' ? 'Access' : currentLanguage === 'zh' ? '交通' : 'アクセス'}</h3>
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Access' : currentLanguage === 'zh' ? '交通' : 'アクセス'}</h3>
                         <p>${spot.access[currentLanguage]}</p>
                     </div>
                     <div class="detail-section">
-                        <h3 class="section-title"><i class="fas fa-map-marked-alt"></i> ${currentLanguage === 'en' ? 'Nearby Spots' : currentLanguage === 'zh' ? '附近景点' : '近くのスポット'}</h3>
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Nearby Spots' : currentLanguage === 'zh' ? '附近景点' : '近くのスポット'}</h3>
                         <p>${spot.nearby[currentLanguage]}</p>
-                        <div class="map-container">
-                            <i class="fas fa-map-marked-alt fa-3x"></i>
-                            <p>${currentLanguage === 'en' ? 'Interactive Map' : currentLanguage === 'zh' ? '交互式地图' : 'インタラクティブマップ'}</p>
-                        </div>
                     </div>
                     <div class="detail-section">
-                        <h3 class="section-title"><i class="fas fa-globe"></i> ${currentLanguage === 'en' ? 'Official Website' : currentLanguage === 'zh' ? '官方网站' : '公式サイト'}</h3>
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Official Website' : currentLanguage === 'zh' ? '官方网站' : '公式サイト'}</h3>
                         <a href="${spot.official}" target="_blank" class="official-link">
-                            <i class="fas fa-external-link-alt"></i>
                             ${currentLanguage === 'en' ? 'Visit Website' : currentLanguage === 'zh' ? '访问网站' : 'サイトを訪問'}
                         </a>
                     </div>
@@ -1272,12 +928,6 @@
                 detailPage.style.display = 'none';
                 mainPage.style.display = 'block';
                 currentSpotId = null;
-            });
-            
-            // お気に入りボタンのイベントリスナー
-            document.getElementById('detailFavoriteBtn').addEventListener('click', () => {
-                toggleFavorite(spot.id);
-                renderSpotDetail(id);
             });
         }
 
@@ -1297,21 +947,6 @@
                 darkMode = !darkMode;
                 localStorage.setItem('darkMode', darkMode);
                 updateMode();
-            });
-            
-            // 検索ボックス
-            searchInput.addEventListener('input', () => {
-                renderSpots();
-            });
-            
-            // フィルターボタン
-            filterButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelector('.filter-btn.active').classList.remove('active');
-                    btn.classList.add('active');
-                    activeFilter = btn.dataset.filter;
-                    renderSpots();
-                });
             });
         }
     </script>
