@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#121212">
+    <title>Tokyo Travel Guide - Discover the Best of Tokyo</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --primary-color: #e53935;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #f5f5f5;
+            --light-bg: #f5f5f5;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            padding-top: 70px;
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        body.light-mode {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        /* ヘッダー */
+        header {
+            background-color: rgba(18, 18, 18, 0.95);
+            box-shadow: var(--shadow);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.light-mode header {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--dark-card);
+            color: var(--dark-text);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: var(--shadow);
+        }
+
+        body.light-mode .btn {
+            background-color: var(--light-card);
+            color: var(--light-text);
+        }
+
+        .btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+        }
+
+        .spot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .spot-card {
+            background-color: var(--dark-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        body.light-mode .spot-card {
+            background-color: var(--light-card);
+        }
+
+        .spot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .spot-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .spot-info {
+            padding: 20px;
+        }
+
+        .spot-name {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .spot-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        body.light-mode .spot-location {
+            color: #666;
+        }
+
+        .spot-description {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .detail-page {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.5s;
+        }
+
+        .detail-header {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .detail-title {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.8rem;
+            max-width: 80%;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .detail-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .detail-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .detail-section {
+            background-color: var(--dark-card);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        body.light-mode .detail-section {
+            background-color: var(--light-card);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+        }
+
+        .official-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .official-link:hover {
+            background-color: #c62828;
+            transform: translateY(-2px);
+        }
+
+        /* フッター */
+        footer {
+            background-color: rgba(18, 18, 18, 0.95);
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        body.light-mode footer {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #666;
+        }
+
+        .contact-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        /* アニメーション */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 言語選択のスタイル */
+        .lang-selector {
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        /* レスポンシブ調整 */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .spot-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-image {
+                height: 250px;
+            }
+            
+            .detail-title {
+                font-size: 1.4rem;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">T</div>
+            <span class="app-name">Tokyo Travel Guide</span>
+        </div>
+        <div class="controls">
+            <div class="lang-selector">
+                <button class="btn lang-btn active" data-lang="en">EN</button>
+                <button class="btn lang-btn" data-lang="zh">中文</button>
+                <button class="btn lang-btn" data-lang="ja">日本語</button>
+            </div>
+            <button class="btn mode-toggle" id="modeToggle">
+                <span class="mode-icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <h1 class="main-title">Discover Tokyo's Top Attractions</h1>
+        
+        <div class="main-page" id="mainPage">
+            <div class="spot-grid">
+                <!-- スポットカードはJavaScriptで生成 -->
+            </div>
+        </div>
+        
+        <div class="detail-page" id="detailPage">
+            <!-- 詳細ページはJavaScriptで生成 -->
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer>
+        <div>Contact us</div>
+        <a href="mailto:mementomorikatsu@gmail.com" class="contact-link">mementomorikatsu@gmail.com</a>
+    </footer>
+
+    <script>
+        // 観光地データ
+        const spots = [
+            {
+                id: 1,
+                name: {
+                    en: "Asakusa & Tokyo Skytree",
+                    zh: "浅草＆东京晴空塔",
+                    ja: "浅草・東京スカイツリー"
+                },
+                description: {
+                    en: "Experience traditional Japanese culture at Senso-ji Temple and enjoy panoramic views of Tokyo from the iconic Tokyo Skytree.",
+                    zh: "在浅草寺体验日本传统文化，并从标志性的东京晴空塔欣赏东京全景。",
+                    ja: "浅草寺で日本の伝統文化を体験し、東京スカイツリーから東京のパノラマを楽しめます。"
+                },
+                location: {
+                    en: "Asakusa, Taito City",
+                    zh: "台东区浅草",
+                    ja: "台東区浅草"
+                },
+                access: {
+                    en: "5-minute walk from Asakusa Station (Tokyo Metro Ginza Line)",
+                    zh: "从浅草站（东京地铁银座线）步行5分钟",
+                    ja: "東京メトロ銀座線浅草駅から徒歩5分"
+                },
+                nearby: {
+                    en: "Nakamise Shopping Street, Sumida River",
+                    zh: "仲见世商业街、隅田川",
+                    ja: "仲見世商店街、隅田川"
+                },
+                official: "https://www.tokyo-skytree.jp/en/",
+                image: "asakusa"
+            },
+            {
+                id: 2,
+                name: {
+                    en: "Ueno Area",
+                    zh: "上野地区",
+                    ja: "上野エリア"
+                },
+                description: {
+                    en: "Explore Ueno Park with its museums, zoo, and beautiful cherry blossoms in spring.",
+                    zh: "探索上野公园的博物馆、动物园和春季美丽的樱花。",
+                    ja: "博物館、動物園、春の美しい桜が楽しめる上野公園を探索しましょう。"
+                },
+                location: {
+                    en: "Ueno, Taito City",
+                    zh: "台东区上野",
+                    ja: "台東区上野"
+                },
+                access: {
+                    en: "Direct access from JR Ueno Station",
+                    zh: "从JR上野站直达",
+                    ja: "JR上野駅直結"
+                },
+                nearby: {
+                    en: "Ueno Zoo, Tokyo National Museum",
+                    zh: "上野动物园、东京国立博物馆",
+                    ja: "上野動物園、東京国立博物館"
+                },
+                official: "https://www.ueno.or.jp/en/",
+                image: "ueno"
+            },
+            {
+                id: 3,
+                name: {
+                    en: "Shibuya & Harajuku",
+                    zh: "涩谷＆原宿",
+                    ja: "渋谷・原宿"
+                },
+                description: {
+                    en: "Visit the famous Shibuya Crossing, experience youth culture in Harajuku, and enjoy shopping and dining.",
+                    zh: "参观著名的涩谷十字路口，在原宿体验青年文化，享受购物和美食。",
+                    ja: "有名な渋谷スクランブル交差点を訪れ、原宿で若者文化を体験し、ショッピングや食事を楽しめます。"
+                },
+                location: {
+                    en: "Shibuya City",
+                    zh: "涩谷区",
+                    ja: "渋谷区"
+                },
+                access: {
+                    en: "Direct access from JR Shibuya Station and JR Harajuku Station",
+                    zh: "从JR涩谷站和JR原宿站直达",
+                    ja: "JR渋谷駅、JR原宿駅直結"
+                },
+                nearby: {
+                    en: "Meiji Shrine, Yoyogi Park",
+                    zh: "明治神宫、代代木公园",
+                    ja: "明治神宮、代々木公園"
+                },
+                official: "https://www.shibuya-scramble-square.com/en/",
+                image: "shibuya"
+            },
+            {
+                id: 4,
+                name: {
+                    en: "Ginza & Marunouchi",
+                    zh: "银座＆丸之内",
+                    ja: "銀座・丸の内"
+                },
+                description: {
+                    en: "Tokyo's premier shopping and business district with luxury boutiques, department stores, and gourmet restaurants.",
+                    zh: "东京首屈一指的购物和商业区，拥有豪华精品店、百货商店和美食餐厅。",
+                    ja: "高級ブティック、デパート、グルメレストランが集まる東京随一のショッピング・ビジネス地区です。"
+                },
+                location: {
+                    en: "Chuo City",
+                    zh: "中央区",
+                    ja: "中央区"
+                },
+                access: {
+                    en: "Direct access from JR Tokyo Station",
+                    zh: "从JR东京站直达",
+                    ja: "JR東京駅直結"
+                },
+                nearby: {
+                    en: "Imperial Palace, Hibiya Park",
+                    zh: "皇居、日比谷公园",
+                    ja: "皇居、日比谷公園"
+                },
+                official: "https://ginza.jp/en/",
+                image: "ginza"
+            },
+            {
+                id: 5,
+                name: {
+                    en: "Tokyo Disney Resort",
+                    zh: "东京迪士尼度假区",
+                    ja: "東京ディズニーリゾート"
+                },
+                description: {
+                    en: "Experience the magic of Disney with two theme parks: Tokyo Disneyland and Tokyo DisneySea.",
+                    zh: "在两个主题公园体验迪士尼的魔力：东京迪士尼乐园和东京迪士尼海洋。",
+                    ja: "東京ディズニーランドと東京ディズニーシーの2つのテーマパークでディズニーの魔法を体験しましょう。"
+                },
+                location: {
+                    en: "Urayasu, Chiba",
+                    zh: "千叶县浦安市",
+                    ja: "千葉県浦安市"
+                },
+                access: {
+                    en: "5-minute walk from JR Maihama Station",
+                    zh: "从JR舞滨站步行5分钟",
+                    ja: "JR舞浜駅から徒歩5分"
+                },
+                nearby: {
+                    en: "Ikspiari Shopping Mall",
+                    zh: "伊克斯皮儿莉购物中心",
+                    ja: "イクスピアリ"
+                },
+                official: "https://www.tokyodisneyresort.jp/en/",
+                image: "disney"
+            },
+            {
+                id: 6,
+                name: {
+                    en: "Nikko",
+                    zh: "日光",
+                    ja: "日光"
+                },
+                description: {
+                    en: "A UNESCO World Heritage site famous for Toshogu Shrine and beautiful natural scenery.",
+                    zh: "联合国教科文组织世界遗产，以日光东照宫和美丽的自然风光而闻名。",
+                    ja: "日光東照宮と美しい自然景観で有名なユネスコ世界遺産です。"
+                },
+                location: {
+                    en: "Nikko, Tochigi",
+                    zh: "栃木县日光市",
+                    ja: "栃木県日光市"
+                },
+                access: {
+                    en: "2 hours from Tokyo by train",
+                    zh: "从东京乘火车2小时",
+                    ja: "東京から電車で2時間"
+                },
+                nearby: {
+                    en: "Lake Chuzenji, Kegon Falls",
+                    zh: "中禅寺湖、华严瀑布",
+                    ja: "中禅寺湖、華厳の滝"
+                },
+                official: "https://www.visitnikko.jp/en/",
+                image: "nikko"
+            },
+            {
+                id: 7,
+                name: {
+                    en: "Mount Takao",
+                    zh: "高尾山",
+                    ja: "高尾山"
+                },
+                description: {
+                    en: "A popular hiking destination with scenic trails, a temple, and panoramic views of Tokyo.",
+                    zh: "一个受欢迎的徒步旅行目的地，拥有风景优美的小径、寺庙和东京的全景。",
+                    ja: "景観の良いハイキングコース、お寺、東京のパノラマビューが楽しめる人気のハイキングスポットです。"
+                },
+                location: {
+                    en: "Hachioji, Tokyo",
+                    zh: "东京都八王子市",
+                    ja: "東京都八王子市"
+                },
+                access: {
+                    en: "1 hour from Shinjuku by train",
+                    zh: "从新宿乘火车1小时",
+                    ja: "新宿から電車で1時間"
+                },
+                nearby: {
+                    en: "Takao 599 Museum",
+                    zh: "高尾599博物馆",
+                    ja: "高尾599ミュージアム"
+                },
+                official: "https://www.takaotozan.co.jp/foreign/en/",
+                image: "takao"
+            },
+            {
+                id: 8,
+                name: {
+                    en: "Shinjuku",
+                    zh: "新宿",
+                    ja: "新宿"
+                },
+                description: {
+                    en: "Tokyo's bustling commercial and entertainment center with skyscrapers, shopping, and nightlife.",
+                    zh: "东京繁华的商业和娱乐中心，拥有摩天大楼、购物和夜生活。",
+                    ja: "超高層ビル、ショッピング、ナイトライフが楽しめる東京の賑やかな商業・娯楽センターです。"
+                },
+                location: {
+                    en: "Shinjuku City",
+                    zh: "新宿区",
+                    ja: "新宿区"
+                },
+                access: {
+                    en: "Direct access from JR Shinjuku Station",
+                    zh: "从JR新宿站直达",
+                    ja: "JR新宿駅直結"
+                },
+                nearby: {
+                    en: "Shinjuku Gyoen Garden, Kabukicho",
+                    zh: "新宿御苑、歌舞伎町",
+                    ja: "新宿御苑、歌舞伎町"
+                },
+                official: "https://www.gotokyo.org/en/spot/15/index.html",
+                image: "shinjuku"
+            },
+            {
+                id: 9,
+                name: {
+                    en: "Ghibli Museum",
+                    zh: "吉卜力美术馆",
+                    ja: "三鷹の森ジブリ美術館"
+                },
+                description: {
+                    en: "A museum dedicated to the works of Studio Ghibli, featuring original animations and exhibits.",
+                    zh: "致力于吉卜力工作室作品的博物馆，展示原创动画和展品。",
+                    ja: "スタジオジブリの作品に特化した博物館で、オリジナルアニメーションや展示品を紹介しています。"
+                },
+                location: {
+                    en: "Mitaka, Tokyo",
+                    zh: "东京都三鹰市",
+                    ja: "東京都三鷹市"
+                },
+                access: {
+                    en: "15 minutes from Shinjuku by train",
+                    zh: "从新宿乘火车15分钟",
+                    ja: "新宿から電車で15分"
+                },
+                nearby: {
+                    en: "Inokashira Park",
+                    zh: "井之头公园",
+                    ja: "井の頭公園"
+                },
+                official: "http://www.ghibli-museum.jp/en/",
+                image: "ghibli"
+            },
+            {
+                id: 10,
+                name: {
+                    en: "Okutama",
+                    zh: "奥多摩",
+                    ja: "奥多摩"
+                },
+                description: {
+                    en: "A natural retreat with mountains, lakes, and hiking trails located in western Tokyo.",
+                    zh: "位于东京西部的自然度假胜地，拥有山脉、湖泊和徒步小径。",
+                    ja: "東京西部に位置する山、湖、ハイキングコースがある自然のリトリート地です。"
+                },
+                location: {
+                    en: "Okutama, Tokyo",
+                    zh: "东京都奥多摩町",
+                    ja: "東京都奥多摩町"
+                },
+                access: {
+                    en: "2 hours from Shinjuku by train",
+                    zh: "从新宿乘火车2小时",
+                    ja: "新宿から電車で2時間"
+                },
+                nearby: {
+                    en: "Okutama Lake, Hikawa Valley",
+                    zh: "奥多摩湖、氷川溪谷",
+                    ja: "奥多摩湖、氷川渓谷"
+                },
+                official: "https://www.okutama-kanko.jp/en/",
+                image: "okutama"
+            },
+            {
+                id: 11,
+                name: {
+                    en: "Hakone",
+                    zh: "箱根",
+                    ja: "箱根"
+                },
+                description: {
+                    en: "A famous hot spring resort area with views of Mount Fuji, lakes, and art museums.",
+                    zh: "著名的温泉度假区，拥有富士山景观、湖泊和美术馆。",
+                    ja: "富士山の景色、湖、美術館が楽しめる有名な温泉リゾートエリアです。"
+                },
+                location: {
+                    en: "Hakone, Kanagawa",
+                    zh: "神奈川县箱根町",
+                    ja: "神奈川県箱根町"
+                },
+                access: {
+                    en: "1.5 hours from Shinjuku by train",
+                    zh: "从新宿乘火车1.5小时",
+                    ja: "新宿から電車で1.5時間"
+                },
+                nearby: {
+                    en: "Lake Ashi, Hakone Shrine",
+                    zh: "芦之湖、箱根神社",
+                    ja: "芦ノ湖、箱根神社"
+                },
+                official: "https://www.hakone.or.jp/en/",
+                image: "hakone"
+            },
+            {
+                id: 12,
+                name: {
+                    en: "Kamakura & Enoshima",
+                    zh: "镰仓＆江之岛",
+                    ja: "鎌倉・江ノ島"
+                },
+                description: {
+                    en: "Historic coastal town with temples, shrines, and a beautiful island connected by bridge.",
+                    zh: "历史悠久的海滨小镇，拥有寺庙、神社和一座通过桥梁连接的美丽岛屿。",
+                    ja: "寺院、神社、橋でつながった美しい島がある歴史的な海岸の町です。"
+                },
+                location: {
+                    en: "Kamakura, Kanagawa",
+                    zh: "神奈川县镰仓市",
+                    ja: "神奈川県鎌倉市"
+                },
+                access: {
+                    en: "1 hour from Tokyo by train",
+                    zh: "从东京乘火车1小时",
+                    ja: "東京から電車で1時間"
+                },
+                nearby: {
+                    en: "Great Buddha of Kamakura, Enoshima Shrine",
+                    zh: "镰仓大佛、江岛神社",
+                    ja: "鎌倉大仏、江島神社"
+                },
+                official: "https://www.enoshima-seacandle.com/en/",
+                image: "kamakura"
+            }
+        ];
+
+        // 初期設定
+        let currentLanguage = 'en';
+        let darkMode = true;
+        let currentSpotId = null;
+
+        // DOM要素
+        const mainPage = document.getElementById('mainPage');
+        const detailPage = document.getElementById('detailPage');
+        const spotGrid = document.querySelector('.spot-grid');
+        const appName = document.querySelector('.app-name');
+        const mainTitle = document.querySelector('.main-title');
+        const modeToggle = document.getElementById('modeToggle');
+        const modeIcon = document.querySelector('.mode-icon');
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 設定の読み込み
+            loadSettings();
+            // スポットの表示
+            renderSpots();
+            // イベントリスナーの設定
+            setupEventListeners();
+        });
+
+        // 設定の読み込み
+        function loadSettings() {
+            // 言語設定
+            const savedLanguage = localStorage.getItem('language');
+            if (savedLanguage) {
+                currentLanguage = savedLanguage;
+                updateLanguageButtons();
+            }
+            
+            // ダークモード設定
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode !== null) {
+                darkMode = savedMode === 'true';
+                updateMode();
+            }
+        }
+
+        // 言語ボタンの更新
+        function updateLanguageButtons() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === currentLanguage) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // テキストの更新
+            updateTexts();
+        }
+
+        // テキストの更新
+        function updateTexts() {
+            // アプリ名
+            appName.textContent = currentLanguage === 'en' ? 'Tokyo Travel Guide' : 
+                                currentLanguage === 'zh' ? '东京旅游指南' : '東京観光ガイド';
+            
+            // メインタイトル
+            mainTitle.textContent = currentLanguage === 'en' ? 'Discover Tokyo\'s Top Attractions' : 
+                                currentLanguage === 'zh' ? '探索东京热门景点' : '東京の人気観光スポットを発見';
+            
+            // スポットの再表示
+            renderSpots();
+            
+            // 詳細ページが表示されている場合は再表示
+            if (currentSpotId !== null) {
+                renderSpotDetail(currentSpotId);
+            }
+        }
+
+        // モードの更新
+        function updateMode() {
+            if (darkMode) {
+                document.body.classList.remove('light-mode');
+                modeIcon.textContent = '🌙';
+            } else {
+                document.body.classList.add('light-mode');
+                modeIcon.textContent = '☀️';
+            }
+        }
+
+        // スポットの表示
+        function renderSpots() {
+            spotGrid.innerHTML = '';
+            
+            spots.forEach(spot => {
+                const card = document.createElement('div');
+                card.className = 'spot-card';
+                card.dataset.id = spot.id;
+                
+                card.innerHTML = `
+                    <img src="https://source.unsplash.com/random/600x400/?${spot.image},japan,tokyo" alt="${spot.name.en}" class="spot-image">
+                    <div class="spot-info">
+                        <h2 class="spot-name">${spot.name[currentLanguage]}</h2>
+                        <div class="spot-location">
+                            📍 ${spot.location[currentLanguage]}
+                        </div>
+                        <p class="spot-description">${spot.description[currentLanguage]}</p>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => showSpotDetail(spot.id));
+                spotGrid.appendChild(card);
+            });
+        }
+
+        // 詳細ページの表示
+        function showSpotDetail(id) {
+            currentSpotId = id;
+            mainPage.style.display = 'none';
+            detailPage.style.display = 'block';
+            renderSpotDetail(id);
+        }
+
+        // 詳細ページのレンダリング
+        function renderSpotDetail(id) {
+            const spot = spots.find(s => s.id === id);
+            
+            detailPage.innerHTML = `
+                <div class="detail-header">
+                    <img src="https://source.unsplash.com/random/1200x600/?${spot.image},japan,tokyo" alt="${spot.name.en}" class="detail-image">
+                    <button class="back-btn" id="backBtn">← ${currentLanguage === 'en' ? 'Back' : currentLanguage === 'zh' ? '返回' : '戻る'}</button>
+                    <h2 class="detail-title">${spot.name[currentLanguage]}</h2>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-section">
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Description' : currentLanguage === 'zh' ? '描述' : '説明'}</h3>
+                        <p>${spot.description[currentLanguage]}</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Access' : currentLanguage === 'zh' ? '交通' : 'アクセス'}</h3>
+                        <p>${spot.access[currentLanguage]}</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Nearby Spots' : currentLanguage === 'zh' ? '附近景点' : '近くのスポット'}</h3>
+                        <p>${spot.nearby[currentLanguage]}</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3 class="section-title">${currentLanguage === 'en' ? 'Official Website' : currentLanguage === 'zh' ? '官方网站' : '公式サイト'}</h3>
+                        <a href="${spot.official}" target="_blank" class="official-link">
+                            ${currentLanguage === 'en' ? 'Visit Website' : currentLanguage === 'zh' ? '访问网站' : 'サイトを訪問'}
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            // 戻るボタンのイベントリスナー
+            document.getElementById('backBtn').addEventListener('click', () => {
+                detailPage.style.display = 'none';
+                mainPage.style.display = 'block';
+                currentSpotId = null;
+            });
+        }
+
+        // イベントリスナーの設定
+        function setupEventListeners() {
+            // 言語切り替え
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentLanguage = btn.dataset.lang;
+                    localStorage.setItem('language', currentLanguage);
+                    updateLanguageButtons();
+                });
+            });
+            
+            // ダーク/ライトモード切り替え
+            modeToggle.addEventListener('click', () => {
+                darkMode = !darkMode;
+                localStorage.setItem('darkMode', darkMode);
+                updateMode();
+            });
+        }
+    </script>
+</body>
+</html>
